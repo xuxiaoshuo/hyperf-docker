@@ -4,7 +4,7 @@ on: [ push ]
 env:
   ENGINE: 'swow'
   SW_VERSION: 'v1.5.3'
-  COMPOSER_VERSION: '2.8.8'
+  COMPOSER_VERSION: '2.8.12'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_ACCESSTOKEN }}
   CODING_PASSWORD: ${{ secrets.CODING_PASSWORD }}
@@ -21,7 +21,7 @@ jobs:
         os: [ ubuntu-latest ]
         spec: [ "" ]
         php-version: [ '8.1', '8.2', '8.3', '8.4' ]
-        alpine-version: [ '3.16', '3.17', '3.18', '3.19', '3.20', '3.21', 'edge' ]
+        alpine-version: [ '3.16', '3.17', '3.18', '3.19', '3.20', '3.21', '3.22', 'edge' ]
         exclude:
           - php-version: '8.4'
             alpine-version: '3.16'
@@ -43,10 +43,14 @@ jobs:
             alpine-version: '3.16'
           - php-version: '8.2'
             alpine-version: '3.17'
+          - php-version: '8.2'
+            alpine-version: 'edge'
           - php-version: '8.1'
             alpine-version: '3.20'
           - php-version: '8.1'
             alpine-version: '3.21'
+          - php-version: '8.1'
+            alpine-version: '3.22'
           - php-version: '8.1'
             alpine-version: 'edge'
       max-parallel: 8
