@@ -7,7 +7,7 @@
 
 ARG ALPINE_VERSION
 
-FROM hyperf/hyperf:8.4-alpine-v${ALPINE_VERSION}-base
+FROM 550419038/hyperf:8.4-alpine-v${ALPINE_VERSION}-base
 
 LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MIT"
 

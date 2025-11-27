@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Login
-docker login ghcr.io --username limingxinleo -p $GITHUB_TOKEN
+docker login ghcr.io --username 550419038 -p $GITHUB_TOKEN
 docker login docker.cnb.cool --username cnb -p $CNB_TOKEN
 
 # Push to Github

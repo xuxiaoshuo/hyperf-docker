@@ -57,6 +57,7 @@ RUN set -ex \
     php82-xmlwriter \
     php82-pcntl \
     php82-opcache \
+    php82-mongodb \
     && ln -sf /usr/bin/php82 /usr/bin/php \
     && php /init.php \
     && apk del --purge *-dev \

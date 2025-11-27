@@ -10,15 +10,15 @@ function check_or_push() {
     TAG=${1}
     if [[ ${CHECK} == "--check" ]]; then
         echo "Checking $TAG ..."
-        version=`docker run hyperf/hyperf:$TAG php -v`
+        version=`docker run 550419038/hyperf:$TAG php -v`
         echo $version | grep -Eo "PHP \d+\.\d+\.\d+"
-        swoole=`docker run hyperf/hyperf:$TAG php --ri swoole` && echo $swoole | grep -Eo "Version => \d+\.\d+\.\d+" || echo "No Swoole."
+        swoole=`docker run 550419038/hyperf:$TAG php --ri swoole` && echo $swoole | grep -Eo "Version => \d+\.\d+\.\d+" || echo "No Swoole."
     fi
 
     if [[ ${CHECK} != "--check" ]]; then
         echo "Publishing "$TAG" ..."
         # Push origin image
-        docker push hyperf/hyperf:${TAG}
+        docker push 550419038/hyperf:${TAG}
     fi
 
     echo -e "\n"
@@ -26,33 +26,48 @@ function check_or_push() {
 
 # build base image
 if [[ ${TASK} == "build" ]]; then
-    export PHP_VERSION=7.3 && export ALPINE_VERSION=3.10 && docker-compose build alpine-base
-    export PHP_VERSION=7.3 && export ALPINE_VERSION=3.11 && docker-compose build alpine-base
+    # PHP 8.1
+    export PHP_VERSION=8.1
+    for ALPINE_VERSION in 3.16 3.17 3.18 3.19; do
+        export ALPINE_VERSION
+        docker-compose build alpine-base
+    done
 
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.10 && docker-compose build alpine-base
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.11 && docker-compose build alpine-base
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.12 && docker-compose build alpine-base
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.13 && docker-compose build alpine-origin-base
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.14 && docker-compose build alpine-origin-base
-    export PHP_VERSION=7.4 && export ALPINE_VERSION=3.15 && docker-compose build alpine-origin-base
+    # PHP 8.2
+    export PHP_VERSION=8.2
+    for ALPINE_VERSION in 3.18 3.19 3.20 3.21 3.22; do
+        export ALPINE_VERSION
+        docker-compose build alpine-base
+    done
 
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.11 && docker-compose build alpine-base
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.12 && docker-compose build alpine-base
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.13 && docker-compose build alpine-origin-base
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.14 && docker-compose build alpine-origin-base
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.15 && docker-compose build alpine-origin-base
-    export PHP_VERSION=8.0 && export ALPINE_VERSION=3.16 && docker-compose build alpine-origin-base
+    # PHP 8.3
+    export PHP_VERSION=8.3
+    for ALPINE_VERSION in 3.19 3.20 3.21 3.22 edge; do
+        export ALPINE_VERSION
+        docker-compose build alpine-base
+    done
 
-    export PHP_VERSION=8.1 && export ALPINE_VERSION=3.12 && docker-compose build alpine-base
-    export PHP_VERSION=8.1 && export ALPINE_VERSION=3.13 && docker-compose build alpine-base
-    export PHP_VERSION=8.1 && export ALPINE_VERSION=3.14 && docker-compose build alpine-base
-    export PHP_VERSION=8.1 && export ALPINE_VERSION=3.15 && docker-compose build alpine-base
-    export PHP_VERSION=8.1 && export ALPINE_VERSION=3.16 && docker-compose build alpine-origin-base
+    # PHP 8.4
+    export PHP_VERSION=8.4
+    for ALPINE_VERSION in 3.21 3.22 edge; do
+        export ALPINE_VERSION
+        docker-compose build alpine-base
+    done
 fi
 
 if [[ ${TASK} == "publish" ]]; then
     # Push base image
-    TAGS="7.3-alpine-v3.10-base 7.3-alpine-v3.11-base 7.4-alpine-v3.10-base 7.4-alpine-v3.11-base 7.4-alpine-v3.12-base 7.4-alpine-v3.13-base 7.4-alpine-v3.14-base 7.4-alpine-v3.15-base 8.0-alpine-v3.11-base 8.0-alpine-v3.12-base 8.0-alpine-v3.13-base 8.0-alpine-v3.14-base 8.0-alpine-v3.15-base 8.1-alpine-v3.12-base 8.1-alpine-v3.13-base 8.1-alpine-v3.14-base 8.1-alpine-v3.15-base"
+    TAGS=""
+
+    # PHP 8.1
+    for AV in 3.16 3.17 3.18 3.19; do TAGS="$TAGS 8.1-alpine-v$AV-base"; done
+    # PHP 8.2
+    for AV in 3.18 3.19 3.20 3.21 3.22; do TAGS="$TAGS 8.2-alpine-v$AV-base"; done
+    # PHP 8.3
+    for AV in 3.19 3.20 3.21 3.22 edge; do TAGS="$TAGS 8.3-alpine-v$AV-base"; done
+    # PHP 8.4
+    for AV in 3.21 3.22 edge; do TAGS="$TAGS 8.4-alpine-v$AV-base"; done
+
     for TAG in ${TAGS}; do
         check_or_push $TAG
     done

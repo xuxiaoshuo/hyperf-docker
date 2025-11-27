@@ -5,7 +5,7 @@ version: "3.7"
 services:
   # base image
   alpine-base:
-    image: "hyperf/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-base"
+    image: "550419038/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-base"
     build:
       context: "${PHP_VERSION}/alpine/base"
       args:
@@ -13,7 +13,7 @@ services:
 
   # swoole image
   alpine-swoole:
-    image: "hyperf/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-swoole${SPEC}-${SW_VERSION}"
+    image: "550419038/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-swoole${SPEC}-${SW_VERSION}"
     build:
       context: "${PHP_VERSION}/alpine/swoole"
       dockerfile: "Dockerfile${SPEC}"
@@ -25,7 +25,7 @@ services:
 
   # swow image
   alpine-swow:
-    image: "hyperf/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-swow${SPEC}-${SW_VERSION}"
+    image: "550419038/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-swow${SPEC}-${SW_VERSION}"
     build:
       context: "${PHP_VERSION}/alpine/swow"
       args:
@@ -36,7 +36,7 @@ services:
 
   # dev image
   alpine-dev:
-    image: "hyperf/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-dev"
+    image: "550419038/hyperf:${PHP_VERSION}-alpine-v${ALPINE_VERSION}-dev"
     build:
       context: "${PHP_VERSION}/alpine/dev"
       args:
