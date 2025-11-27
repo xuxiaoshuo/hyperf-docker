@@ -1,14 +1,17 @@
 name: Build Swow
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - master
+
 env:
   ENGINE: 'swow'
   SW_VERSION: 'v1.5.3'
   COMPOSER_VERSION: '2.8.12'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_ACCESSTOKEN }}
-  CODING_PASSWORD: ${{ secrets.CODING_PASSWORD }}
-  CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
+
 jobs:
   build:
     name: Build PHP ${{ matrix.php-version }} Alpine ${{ matrix.alpine-version }} ${{ matrix.spec }}
@@ -83,7 +86,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            hyperf/hyperf
+            550419038/hyperf
           tags: |
             type=semver,pattern=${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-${{ env.ENGINE }}${{ env.SPEC }}-v{{version}},value=${{ env.SW_VERSION }}
             type=semver,pattern=${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-${{ env.ENGINE }}${{ env.SPEC }}-v{{major}}.{{minor}},value=${{ env.SW_VERSION }}
@@ -93,9 +96,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.php-version }}/alpine/swow
-          load: true
-          tags: hyperf/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-swow
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.php-version }}/alpine/swow/Dockerfile${{ env.SPEC }}
+          platforms: linux/amd64,linux/arm64
           build-args: |
             "ALPINE_VERSION=${{ matrix.alpine-version }}"
             "COMPOSER_VERSION=${{ env.COMPOSER_VERSION }}"

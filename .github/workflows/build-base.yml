@@ -2,6 +2,8 @@ name: Build Base Image
 
 on:
   push:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       event:
@@ -70,20 +72,20 @@ jobs:
         with:
           context: ${{ matrix.php-version }}/alpine/base
           load: true
-          tags: hyperf/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base
+          tags: 550419038/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base
           build-args: |
             "ALPINE_VERSION=${{ matrix.alpine-version }}"
       - name: Check
         run: |
-          docker run --entrypoint php -v $PWD/tests/base:/opt/www hyperf/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base /opt/www/openssl.php
+          docker run --entrypoint php -v $PWD/tests/base:/opt/www 550419038/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base /opt/www/openssl.php
       - name: Push
-        if: ${{ github.event.inputs.event == 'publish' }}
+        if: ${{ github.event_name == 'push' || github.event.inputs.event == 'publish' }}
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.php-version }}/alpine/base
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: hyperf/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base
+          tags: 550419038/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base
           build-args: |
             "ALPINE_VERSION=${{ matrix.alpine-version }}"
 

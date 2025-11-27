@@ -1,9 +1,14 @@
 name: Build Develop
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - master
+
 env:
   COMPOSER_VERSION: '2.8.12'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   build:
     name: Build PHP ${{ matrix.php-version }} Alpine ${{ matrix.alpine-version }}
@@ -74,8 +79,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.php-version }}/alpine/dev
-          load: true
-          tags: hyperf/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-dev
+          push: true
+          tags: 550419038/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-dev
           build-args: |
             "ALPINE_VERSION=${{ matrix.alpine-version }}"
             "COMPOSER_VERSION=${{ env.COMPOSER_VERSION }}"
