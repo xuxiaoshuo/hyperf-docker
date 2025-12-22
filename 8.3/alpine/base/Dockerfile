@@ -19,7 +19,8 @@ COPY ./init.php /init.php
 RUN set -ex \
     && apk update \
     && apk add --no-cache \
-    # Install base packages ('ca-certificates' will install 'nghttp2-libs')
+    # Install base packages ('ca-certificates' will install 'nghttp2-libs') \
+    ffmpeg \
     ca-certificates \
     curl \
     wget \
