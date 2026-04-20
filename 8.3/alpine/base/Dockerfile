@@ -37,6 +37,7 @@ RUN set -ex \
     php83-gd \
     php83-iconv \
     php83-mbstring \
+    php83-intl \
     php83-mysqlnd \
     php83-openssl \
     php83-pdo \
