@@ -63,7 +63,7 @@ RUN set -ex \
     && ln -sf /usr/bin/php83 /usr/bin/php \
     && php /init.php \
     && apk del --purge *-dev \
-    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/share/php83 \
+    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
     && php -v \
     && php -m \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
