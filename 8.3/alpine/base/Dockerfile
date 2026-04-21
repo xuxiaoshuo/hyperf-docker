@@ -36,7 +36,6 @@ RUN set -ex \
     php83-gd \
     php83-iconv \
     php83-mbstring \
-    php83-intl \
     php83-mysqlnd \
     php83-openssl \
     php83-pdo \
@@ -62,7 +61,7 @@ RUN set -ex \
     && ln -sf /usr/bin/php83 /usr/bin/php \
     && php /init.php \
     && apk del --purge *-dev \
-    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
+    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/share/php83 \
     && php -v \
     && php -m \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
