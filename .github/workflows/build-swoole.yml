@@ -7,7 +7,7 @@ on:
 
 env:
   ENGINE: 'swoole'
-  SW_VERSION: 'v6.1.1'
+  SW_VERSION: 'v6.2.2'
   COMPOSER_VERSION: '2.8.12'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -24,38 +24,16 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         spec: [ "", "-slim" ]
-        php-version: [ '8.3' ]
-        alpine-version: [ '3.16', '3.17', '3.18', '3.19', '3.20', '3.21', '3.22', 'edge' ]
+        php-version: [ '8.3', '8.4' ]
+        alpine-version: [ '3.19', '3.20', '3.21', '3.22', 'edge' ]
         exclude:
-          - php-version: '8.4'
-            alpine-version: '3.16'
-          - php-version: '8.4'
-            alpine-version: '3.17'
-          - php-version: '8.4'
-            alpine-version: '3.18'
           - php-version: '8.4'
             alpine-version: '3.19'
           - php-version: '8.4'
             alpine-version: '3.20'
-          - php-version: '8.3'
-            alpine-version: '3.16'
-          - php-version: '8.3'
-            alpine-version: '3.17'
-          - php-version: '8.3'
-            alpine-version: '3.18'
           - php-version: '8.2'
-            alpine-version: '3.16'
+            alpine-version: '3.23'
           - php-version: '8.2'
-            alpine-version: '3.17'
-          - php-version: '8.2'
-            alpine-version: 'edge'
-          - php-version: '8.1'
-            alpine-version: '3.20'
-          - php-version: '8.1'
-            alpine-version: '3.21'
-          - php-version: '8.1'
-            alpine-version: '3.22'
-          - php-version: '8.1'
             alpine-version: 'edge'
       max-parallel: 16
       fail-fast: false
