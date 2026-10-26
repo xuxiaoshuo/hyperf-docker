@@ -14,11 +14,13 @@ LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MI
 ARG SW_VERSION
 ARG COMPOSER_VERSION
 ARG PHP_BUILD_VERSION
+ARG XLSWRITER_VERSION
 
 ##
 # ---------- env settings ----------
 ##
-ENV SW_VERSION=${SW_VERSION:-"v5.1.1"} \
+ENV SW_VERSION=${SW_VERSION:-"v6.2.3"} \
+    XLSWRITER_VERSION=${XLSWRITER_VERSION:-"3.0.0"} \
     COMPOSER_VERSION=${COMPOSER_VERSION:-"2.6.6"} \
     COMPOSER_ALLOW_SUPERUSER=1 \
     #  install and remove building packages
@@ -38,6 +40,8 @@ RUN set -ex \
     && cd /tmp \
     && mkdir -p swoole \
     && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
+    # upstream fix: sw_usleep is undeclared on non-futex platforms (swoole#6249)
+    && sed -i 's/sw_usleep(1000);/usleep(1000);/' swoole/src/core/misc.cc \
     && ln -s /usr/bin/phpize${PHP_BUILD_VERSION} /usr/local/bin/phpize \
     && ln -s /usr/bin/php-config${PHP_BUILD_VERSION} /usr/local/bin/php-config \
     && ( \
@@ -46,11 +50,23 @@ RUN set -ex \
         && ./configure --enable-openssl --enable-swoole-curl --enable-cares --enable-swoole-pgsql --enable-swoole-sqlite --with-swoole-odbc=unixodbc,/usr \
         && make -s -j$(nproc) && make install \
     ) \
+    # php extension:xlswriter
+    && cd /tmp \
+    && curl -SL "https://pecl.php.net/get/xlswriter-${XLSWRITER_VERSION}.tgz" -o xlswriter.tar.gz \
+    && mkdir -p xlswriter \
+    && tar -xf xlswriter.tar.gz -C xlswriter --strip-components=1 \
+    && ( \
+        cd xlswriter \
+        && phpize \
+        && ./configure --with-php-config=/usr/local/bin/php-config \
+        && make -s -j$(nproc) && make install \
+    ) \
     && echo "memory_limit=1G" > /etc/php${PHP_BUILD_VERSION}/conf.d/00_default.ini \
     && echo "max_input_vars=PHP_INT_MAX" >> /etc/php${PHP_BUILD_VERSION}/conf.d/00_default.ini \
     && echo "opcache.enable_cli = 'On'" >> /etc/php${PHP_BUILD_VERSION}/conf.d/00_opcache.ini \
     && echo "extension=swoole.so" > /etc/php${PHP_BUILD_VERSION}/conf.d/50_swoole.ini \
     && echo "swoole.use_shortname = 'Off'" >> /etc/php${PHP_BUILD_VERSION}/conf.d/50_swoole.ini \
+    && echo "extension=xlswriter.so" > /etc/php${PHP_BUILD_VERSION}/conf.d/50_xlswriter.ini \
     # install composer
     && wget -nv -O /usr/local/bin/composer https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar \
     && chmod u+x /usr/local/bin/composer \
@@ -61,6 +77,7 @@ RUN set -ex \
     && php -v \
     && php -m \
     && php --ri swoole \
+    && php --ri xlswriter \
     && php --ri Zend\ OPcache \
     && composer \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"

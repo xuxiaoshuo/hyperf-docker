@@ -58,7 +58,10 @@ RUN set -ex \
     php84-xmlwriter \
     php84-pcntl \
     php84-opcache \
-    php84-mongodb \
+    # 3.22 ships mongodb 2.x; pin 1.20.x for application compatibility
+    && apk add --no-cache \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/v3.21/community \
+    php84-pecl-mongodb=1.20.1-r0 \
     && ln -sf /usr/bin/php84 /usr/bin/php \
     && php /init.php \
     && apk del --purge *-dev \
