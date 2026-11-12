@@ -30,7 +30,7 @@ ENV SW_VERSION=${SW_VERSION:-"v6.2.3"} \
 RUN set -ex \
     && apk update \
     # for swoole extension libaio linux-headers
-    && apk add --no-cache libstdc++ openssl git bash c-ares-dev libpq-dev php84-pdo_pgsql php84-pdo_sqlite php84-pdo_odbc  php84-intl icu-data-full gdb \
+    && apk add --no-cache libstdc++ openssl git bash c-ares-dev libpq-dev php84-pdo_pgsql php84-pdo_sqlite php84-pdo_odbc  php84-intl icu-data-full gdb php84-dbg \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS unixodbc-dev sqlite-dev \
     # download
     && cd /tmp \

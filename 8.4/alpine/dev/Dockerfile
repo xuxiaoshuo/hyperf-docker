@@ -25,7 +25,7 @@ ENV PHPIZE_DEPS="autoconf dpkg-dev dpkg file g++ gcc libc-dev make php${PHP_BUIL
 # update
 RUN set -ex \
     && apk update \
-    && apk add --no-cache libstdc++ openssl git bash gdb \
+    && apk add --no-cache libstdc++ openssl git bash gdb php${PHP_BUILD_VERSION}-dbg \
     && apk add --no-cache $PHPIZE_DEPS libaio-dev openssl-dev curl-dev \
     && ln -s /usr/bin/phpize${PHP_BUILD_VERSION} /usr/local/bin/phpize \
     && ln -s /usr/bin/php-config${PHP_BUILD_VERSION} /usr/local/bin/php-config \
